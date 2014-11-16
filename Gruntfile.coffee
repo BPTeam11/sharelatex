@@ -45,9 +45,9 @@ SERVICES = [{
 	repo: "https://github.com/sharelatex/spelling-sharelatex.git"
 	version: "v0.1.0"
 }, {
-  name: "merge"
-  repo: "https://github.com/nopanic/merge-sharelatex.git"
-  version: "v0.0.1"
+	name: "merge"
+	repo: "https://github.com/nopanic/merge-sharelatex.git"
+	version: "v0.0.1"
 }]
 
 module.exports = (grunt) ->
