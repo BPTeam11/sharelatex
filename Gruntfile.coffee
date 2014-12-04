@@ -44,6 +44,10 @@ SERVICES = [{
 	name: "spelling"
 	repo: "https://github.com/sharelatex/spelling-sharelatex.git"
 	version: "v0.1.0"
+}, {
+  name: "merge"
+  repo: "https://github.com/nopanic/merge-sharelatex.git"
+  version: "v0.0.1"
 }]
 
 module.exports = (grunt) ->
@@ -185,7 +189,7 @@ module.exports = (grunt) ->
 				proc = spawn "git", ["pull"], cwd: dir, stdio: "inherit"
 				proc.on "close", () ->
 					callback()
-					
+
 		createNewRelease: (service, version, callback = (error) ->) ->
 			dir = service.name
 			proc = spawn "sed", [
@@ -203,13 +207,13 @@ module.exports = (grunt) ->
 							proc = spawn "git", ["push", "--tags"], cwd: dir, stdio: "inherit"
 							proc.on "close", () ->
 								callback()
-								
+
 		installNpmModules: (service, callback = (error) ->) ->
 			dir = service.name
 			proc = spawn "npm", ["install"], stdio: "inherit", cwd: dir
 			proc.on "close", () ->
 				callback()
-				
+
 		createDataDirs: (callback = (error) ->) ->
 			DIRS = [
 				"tmp/dumpFolder"
@@ -283,9 +287,9 @@ module.exports = (grunt) ->
 					latexmk comes with TexLive 2013, and must be a version from 2013 or later.
 					If you have already have TeXLive installed, then make sure it is
 					included in your PATH (example for 64-bit linux):
-					
+
 						export PATH=$PATH:/usr/local/texlive/2014/bin/x86_64-linux/
-					
+
 					This is a not a fatal error, but compiling will not work without latexmk.
 					"""
 					return callback(error)
@@ -310,7 +314,7 @@ module.exports = (grunt) ->
 							"""
 							error = new Error("latexmk is too old")
 				callback(error)
-				
+
 		checkAspell: (callback = (error) ->) ->
 			grunt.log.write "Checking aspell is installed... "
 			exec "aspell dump dicts", (error, stdout, stderr) ->
@@ -318,15 +322,15 @@ module.exports = (grunt) ->
 					grunt.log.error "FAIL."
 					grunt.log.errorlns """
 					Either aspell is not installed or is not in your PATH.
-					
+
 					On Ubuntu you can install aspell with:
-					
+
 						sudo apt-get install aspell
-						
+
 					Or on a mac:
-					
+
 						brew install aspell
-						
+
 					This is not a fatal error, but the spell-checker will not work without aspell
 					"""
 					return callback(error)
@@ -358,11 +362,11 @@ module.exports = (grunt) ->
 					Please configure your Amazon S3 credentials in config/settings.development.coffee
 
 					Amazon S3 (Simple Storage Service) is a cloud storage service provided by
-					Amazon. ShareLaTeX uses S3 for storing binary files like images. You can 
+					Amazon. ShareLaTeX uses S3 for storing binary files like images. You can
 					sign up for an account and find out more at:
 
 							http://aws.amazon.com/s3/
-										
+
 					"""
 					return callback()
 				client.getFile "does-not-exist", (error, response) ->
@@ -389,7 +393,7 @@ module.exports = (grunt) ->
 					else
 						grunt.log.error "FAIL."
 						grunt.log.errorlns """
-						Could not find directory "#{Settings.filestore.stores.user_files}". 
+						Could not find directory "#{Settings.filestore.stores.user_files}".
 						Please check your configuration.
 						"""
 					callback()
@@ -404,11 +408,11 @@ module.exports = (grunt) ->
 					grunt.log.error "FAIL."
 					grunt.log.errorlns """
 					Either make is not installed or is not in your path.
-					
+
 					On Ubuntu you can install make with:
-					
+
 					    sudo apt-get install build-essential
-					
+
 					"""
 					return callback(error)
 				else if error?
@@ -443,7 +447,7 @@ module.exports = (grunt) ->
 				"--depends", "mongodb-org > 2.4.0"
 				"--depends", "nodejs > 0.10.0"
 			)
-			
+
 			@buildPackageSettingsFile()
 
 			@buildUpstartScripts()
@@ -457,12 +461,12 @@ module.exports = (grunt) ->
 				# Create random secret keys (twice, once for http auth pass, once for cookie secret).
 				sed -i "0,/CRYPTO_RANDOM/s/CRYPTO_RANDOM/$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 64 | head -n 1)/" /etc/sharelatex/settings.coffee
 				sed -i "0,/CRYPTO_RANDOM/s/CRYPTO_RANDOM/$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 64 | head -n 1)/" /etc/sharelatex/settings.coffee
-				
+
 				sudo adduser --system --group --home /var/www/sharelatex --no-create-home sharelatex
 
 				mkdir -p /var/log/sharelatex
 				chown sharelatex:sharelatex /var/log/sharelatex
-				
+
 				mkdir -p /var/lib/sharelatex
 
 			"""
@@ -470,13 +474,13 @@ module.exports = (grunt) ->
 			for dir in ["data/user_files", "tmp/uploads", "data/compiles", "data/cache", "tmp/dumpFolder"]
 				after_install_script += """
 					mkdir -p /var/lib/sharelatex/#{dir}
-					
+
 				"""
-			
+
 			after_install_script += """
 				chown -R sharelatex:sharelatex /var/lib/sharelatex
-				
-			"""	
+
+			"""
 
 			for service in SERVICES
 				after_install_script += "service sharelatex-#{service.name} restart\n"
@@ -503,7 +507,7 @@ module.exports = (grunt) ->
 				else
 					callback()
 
-			
+
 
 
 
