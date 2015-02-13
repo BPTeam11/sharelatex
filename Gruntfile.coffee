@@ -18,7 +18,7 @@ SERVICES = [{
 	version: "master"
 }, {
 	name: "document-updater"
-	repo: "https://github.com/sharelatex/document-updater-sharelatex.git"
+	repo: "https://github.com/BPTeam11/document-updater-sharelatex.git"
 	version: "master"
 }, {
 	name: "clsi"
