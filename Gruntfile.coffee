@@ -10,7 +10,7 @@ async = require "async"
 
 SERVICES = [{
 	name: "web"
-	repo: "https://github.com/sharelatex/web-sharelatex.git"
+	repo: "https://github.com/BPTeam11/web-sharelatex.git"
 	version: "master"
 }, {
 	name: "real-time"
